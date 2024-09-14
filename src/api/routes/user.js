@@ -1,4 +1,4 @@
-const { isAdmin } = require('../../middlewares/auth')
+const { isAdmin, isAuth } = require('../../middlewares/auth')
 const {
    getUsers,
    getUser,
@@ -15,6 +15,6 @@ usersRouter.get('/', [isAdmin], getUsers)
 usersRouter.post('/register', register)
 usersRouter.post('/login', login)
 usersRouter.put('/:id', [isAdmin], updateUser)
-usersRouter.delete('/:id', [isAdmin], deleteUser)
+usersRouter.delete('/:id', [isAuth], deleteUser)
 
 module.exports = { usersRouter }

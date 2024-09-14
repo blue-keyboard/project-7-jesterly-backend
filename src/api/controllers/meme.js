@@ -28,14 +28,13 @@ const getMeme = async (req, res, next) => {
 // User
 const postMeme = async (req, res, next) => {
    try {
-      const { id, memes } = req.user
-
-      console.log(req.user)
+      const { _id, memes } = req.user
 
       const newMeme = new Meme(req.body)
-      newMeme.uploader = id
-      const savedMeme = await newMeme.save().populate(populateQuery)
-      await User.findByIdAndUpdate(id, {
+      newMeme.uploader = _id
+
+      const savedMeme = await newMeme.save()
+      await User.findByIdAndUpdate(_id, {
          memes: [...new Set([...memes, newMeme])]
       })
 
@@ -51,8 +50,6 @@ const deleteMeme = async (req, res, next) => {
       const { _id, role } = req.user
       const memeId = req.params.id
       const meme = await Meme.findById(memeId).populate(populateQuery)
-
-      console.log(meme.uploader === _id, meme.uploader, _id)
 
       if (!meme.uploader.equals(_id) && role === 'user') {
          return res

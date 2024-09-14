@@ -12,13 +12,13 @@ const userSchema = new mongoose.Schema(
          enum: ['user', 'admin'],
          default: 'user'
       },
-      _memes: [
+      memes: [
          {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'memes'
          }
       ],
-      _memelists: [
+      memelists: [
          {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'memelists'

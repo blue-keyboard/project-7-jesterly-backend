@@ -4,8 +4,8 @@ const { User } = require('../models/user')
 const bcrypt = require('bcrypt')
 
 const populateQuery = [
-   { path: '_memes', select: ['_id', 'title'] },
-   { path: '_memelists', select: ['_id', 'title'] }
+   { path: 'memes', select: ['_id', 'title'] },
+   { path: 'memelists', select: ['_id', 'title'] }
 ]
 
 // Admin role
@@ -18,7 +18,7 @@ const getUsers = async (req, res, next) => {
    }
 }
 
-//Everyone
+// Everyone
 const getUser = async (req, res, next) => {
    try {
       const user = await User.findById(req.params.id).populate(populateQuery)
@@ -97,13 +97,18 @@ const updateUser = async (req, res, next) => {
    }
 }
 
-// admin role
+// admin role, same user
 const deleteUser = async (req, res, next) => {
    try {
+      if (!req.user._id.equals(req.params.id) || !req.user.role === 'admin') {
+         return res
+            .status(400)
+            .json("You don't have permissions to perform this action")
+      }
+
       const userDeleted = await User.findByIdAndDelete(req.params.id).populate(
          populateQuery
       )
-
       return res.status(200).json(userDeleted)
    } catch (error) {
       return res.status(400).json(error.message)
