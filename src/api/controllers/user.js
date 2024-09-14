@@ -1,12 +1,17 @@
 const { generateSign } = require('../../utils/jwt')
+const { Memelist } = require('../models/memelist')
 const { User } = require('../models/user')
 const bcrypt = require('bcrypt')
+
+const populateQuery = [
+   { path: '_memes', select: ['_id', 'title'] },
+   { path: '_memelists', select: ['_id', 'title'] }
+]
 
 // Admin role
 const getUsers = async (req, res, next) => {
    try {
-      const users = await User.find()
-
+      const users = await User.find().populate(populateQuery)
       return res.status(200).json(users)
    } catch (error) {
       return res.status(400).json(error.message)
@@ -16,7 +21,7 @@ const getUsers = async (req, res, next) => {
 //Everyone
 const getUser = async (req, res, next) => {
    try {
-      const user = await User.findById(req.params.id)
+      const user = await User.findById(req.params.id).populate(populateQuery)
 
       return res.status(200).json(user)
    } catch (error) {
@@ -56,7 +61,9 @@ const register = async (req, res, next) => {
 // Everyone
 const login = async (req, res, next) => {
    try {
-      const user = await User.findOne({ username: req.body.username })
+      const user = await User.findOne({ username: req.body.username }).populate(
+         populateQuery
+      )
 
       if (!user) {
          return res.status(404).json('Username not found')
@@ -82,7 +89,7 @@ const updateUser = async (req, res, next) => {
             new: true,
             runValidators: true
          }
-      )
+      ).populate(populateQuery)
 
       return res.status(200).json(userUpdated)
    } catch (error) {
@@ -93,7 +100,9 @@ const updateUser = async (req, res, next) => {
 // admin role
 const deleteUser = async (req, res, next) => {
    try {
-      const userDeleted = await User.findByIdAndDelete(req.params.id)
+      const userDeleted = await User.findByIdAndDelete(req.params.id).populate(
+         populateQuery
+      )
 
       return res.status(200).json(userDeleted)
    } catch (error) {

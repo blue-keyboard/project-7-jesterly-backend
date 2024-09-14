@@ -12,8 +12,6 @@ const isAuth = async (req, res, next) => {
       user.password = null
       req.user = user
 
-      console.log(user)
-
       next()
    } catch (error) {
       return res.status(400).json('Unauthorized')

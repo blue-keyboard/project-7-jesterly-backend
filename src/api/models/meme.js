@@ -13,7 +13,7 @@ const memeSchema = new mongoose.Schema(
    },
    {
       timestamps: true,
-      collection: 'memelists'
+      collection: 'memes'
    }
 )
 

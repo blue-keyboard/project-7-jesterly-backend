@@ -4,7 +4,7 @@ const memelistSchema = new mongoose.Schema(
    {
       title: { type: String, required: true },
       description: { type: String },
-      memes: [
+      _memes: [
          {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'memes'
