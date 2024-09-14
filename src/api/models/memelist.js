@@ -17,7 +17,8 @@ const memelistSchema = new mongoose.Schema(
       }
    },
    {
-      timestamps: true
+      timestamps: true,
+      collection: 'memelists'
    }
 )
 
