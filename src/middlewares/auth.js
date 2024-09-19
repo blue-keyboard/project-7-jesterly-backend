@@ -7,12 +7,18 @@ const isAuth = async (req, res, next) => {
       const parsedToken = token.replace('Bearer ', '')
 
       const { id } = verifyJwt(parsedToken)
-      const user = await User.findById(id)
-      user.password = null
-      req.user = user
+
+      try {
+         const user = await User.findById(id)
+         user.password = null
+         req.user = user
+      } catch (error) {
+         return res.status(404).json('User not found')
+      }
 
       next()
    } catch (error) {
+      console.log(error.message)
       return res.status(400).json('Unauthorized')
    }
 }

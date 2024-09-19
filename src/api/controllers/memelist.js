@@ -58,6 +58,7 @@ const updateMemelist = async (req, res, next) => {
       const { uploader } = await Memelist.findById(listId).populate(
          populateQuery
       )
+
       if (!uploader.equals(_id)) {
          return res
             .status(400)
@@ -80,9 +81,7 @@ const deleteMemelist = async (req, res, next) => {
    try {
       const { _id, role } = req.user
       const memelistId = req.params.id
-      const memelist = await Memelist.findById(memelistId).populate(
-         populateQuery
-      )
+      const memelist = await Memelist.findById(memelistId)
 
       if (!memelist.uploader.equals(_id) && role === 'user') {
          return res
